@@ -28,7 +28,7 @@ class GradientProcessor(DataFrameGenerator):
     
 class GradientIterator(GradientProcessor):
     def __init__(self, ticker, date_points, learning_rate=0.01, num_iterations=1000, **kwargs):
-        super().__init__(ticker, date_points, learning_rate=0.01, num_iterations=1000, **kwargs)
+        super().__init__(ticker, date_points, **kwargs)
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
 
