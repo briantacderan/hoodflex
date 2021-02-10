@@ -16,8 +16,8 @@ class WidgetForecaster(GradientIterator):
         super().__init__(ticker, start, date_points, **kwargs)
         self.plt_value_1 = 0.0
         self.plt_value_2 = 18.0
-        self.plt_label_1 = '11/10/2020'
-        self.plt_label_2 = '11/10/2022'
+        self.plt_label_1 = '08/10/2020'
+        self.plt_label_2 = '08/10/2021'
         
     def new_axis_values(self, b, m):
         range_X = 37
