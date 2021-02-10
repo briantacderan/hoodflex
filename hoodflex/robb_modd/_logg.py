@@ -14,11 +14,11 @@ from hoodflex.robb_modd._joog import GradientIterator
 class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
-        self.plt_value_1 = 0.0
+        self.plt_value_1 = 6.0
         self.plt_value_2 = 12.0
         
     def new_axis_values(self, b, m):
-        range_X = 6
+        range_X = 12
         new_X = list(self.x)
         new_X.append(range_X)
         new_Y = list(self.y)
