@@ -20,9 +20,9 @@ class WidgetForecaster(GradientIterator):
         
     def new_axis_values(self):
         range_X = 9.5
-        new_X = list(self.axis_x*2)
+        new_X = list(self.x*2)
         new_X.append(range_X)
-        new_Y = list(self.axis_y)
+        new_Y = list(self.y)
         forecast_line = self.opt_m*range_X + self.opt_b
         new_Y.append(forecast_line)
         return [new_X, new_Y]
