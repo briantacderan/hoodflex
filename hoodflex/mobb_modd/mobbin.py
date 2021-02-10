@@ -152,39 +152,13 @@ class Mobbin(GoodLook):
             line_titles += f'\n       Statement Index: {i} - ' + self.titles[i]
         last = '\n\n\n' + '-'*100 + '\n\n\n\n\n\n\n'
         return f'{line1}{line_titles}{last}'
-    
-    def balance_sheet(self, csv=False):
-        maybe = False
-        for i in range(len(self.titles)):
-            title_split = self.titles[i].upper().split(' ')
-            for j in range(len(title_split)):
-                if title_split[j] == 'BALANCE':
-                    index_maybe = i
-                    maybe = True
-                if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
-                    maybe = False
-                elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
-                    maybe = False
-                    index = index_maybe
-        statement_name = self.titles[index]
-        df = self.statements[statement_name]
-        filename = None
-        if csv:
-            filename = './static/resources/data/' + self.company_name.lower().split(' ')[0].split(',')[0] + '-' + self.year + '-' + self.form.lower() + '-bs' + '.csv'
-            df.to_csv(filename)
-        df_copy = df.copy()
-        df_styled = self.style_table(df_copy, statement_name)
-        if filename:
-            return [df, filename]
-        else:    
-            return [df, df_styled]
         
-    def income_statement(self, csv=False):
+    def complete_scrape(self, csv=False, df_title=None):
         maybe = False
         for i in range(len(self.titles)):
             title_split = self.titles[i].upper().split(' ')
             for j in range(len(title_split)):
-                if title_split[j] == 'INCOME':
+                if title_split[j] == df_title:
                     index_maybe = i
                     maybe = True
                 if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
@@ -196,7 +170,7 @@ class Mobbin(GoodLook):
         df = self.statements[statement_name]
         filename = None
         if csv:
-            filename = './static/resources/data/' + self.company_name.lower().split(' ')[0].split(',')[0] + '-' + self.year + '-' + self.form.lower() + '-income' + '.csv'
+            filename = f'./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title.lower()}.csv'
             df.to_csv(filename)
         df_copy = df.copy()
         df_styled = self.style_table(df_copy, statement_name)
@@ -204,93 +178,14 @@ class Mobbin(GoodLook):
             return [df, filename]
         else:    
             return [df, df_styled]
-        
-    def operations(self, csv=False):
-        maybe = False
-        for i in range(len(self.titles)):
-            title_split = self.titles[i].upper().split(' ')
-            for j in range(len(title_split)):
-                if title_split[j] == 'OPERATIONS':
-                    index_maybe = i
-                    maybe = True
-                if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
-                    maybe = False
-                elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
-                    maybe = False
-                    index = index_maybe
-        statement_name = self.titles[index]
-        df = self.statements[statement_name]
-        filename = None
-        if csv:
-            filename = './static/resources/data/' + self.company_name.lower().split(' ')[0].split(',')[0] + '-' + self.year + '-' + self.form.lower() + '-ops' + '.csv'
-            df.to_csv(filename)
-        df_copy = df.copy()
-        df_styled = self.style_table(df_copy, statement_name)
-        if filename:
-            return [df, filename]
-        else:    
-            return [df, df_styled]
-        
-    def stockholders_equity(self, csv=False):
-        maybe = False
-        for i in range(len(self.titles)):
-            title_split = self.titles[i].upper().split(' ')
-            for j in range(len(title_split)):
-                if title_split[j] == 'EQUITY':
-                    index_maybe = i
-                    maybe = True
-                if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
-                    maybe = False
-                elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
-                    maybe = False
-                    index = index_maybe
-        statement_name = self.titles[index]
-        df = self.statements[statement_name]
-        filename = None
-        if csv:
-            filename = './static/resources/data/' + self.company_name.lower().split(' ')[0].split(',')[0] + '-' + self.year + '-' + self.form.lower() + '-equity' + '.csv'
-            df.to_csv(filename)
-        df_copy = df.copy()
-        df_styled = self.style_table(df_copy, statement_name)
-        if filename:
-            return [df, filename]
-        else:    
-            return [df, df_styled]
-        
-    def cash_flows(self, csv=False):
-        maybe = False
-        for i in range(len(self.titles)):
-            title_split = self.titles[i].upper().split(' ')
-            for j in range(len(title_split)):
-                if title_split[j] == 'CASH':
-                    index_maybe = i
-                    maybe = True
-                if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
-                    maybe = False
-                elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
-                    maybe = False
-                    index = index_maybe
-        statement_name = self.titles[index]
-        df = self.statements[statement_name]
-        filename = None
-        if csv:
-            filename = './static/resources/data/' + self.company_name.lower().split(' ')[0].split(',')[0] + '-' + self.year + '-' + self.form.lower() + '-cash' + '.csv'
-            df.to_csv(filename)
-        df_copy = df.copy()
-        df_styled = self.style_table(df_copy, statement_name)
-        if filename:
-            return [df, filename]
-        else:    
-            return [df, df_styled]
-    
-    def statements_to_csv(self):
-        bs_df, bs_file = self.balance_sheet(csv=True)
-        income_df, income_file = self.income_statement(csv=True)
-        ops_df, ops_file = self.operations(csv=True)
-        equity_df, equity_file = self.stockholders_equity(csv=True)
-        cash_df, cash_file = self.cash_flows(csv=True)
-        file_array = [bs_file, income_file, ops_file, equity_file, cash_file]
-        df_array = [bs_df, income_df, ops_df, equity_df, cash_df]
+            
+    def statements_to_csv(self, df_titles=['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']):
+        df_array = []
+        file_array = []
+        for i in range(len(df_titles)):
+            df, file = self.complete_scrape(csv=True, df_title=df_titles[i])
+            df_array.append(df)
+            file_array.append(file)
         return [df_array, file_array]
     
     def statements_to_sql(self):
