@@ -302,4 +302,4 @@ class Mobbin(GoodLook):
         self.df_array[2].to_sql('Operation', con=engine, if_exists='replace')
         self.df_array[3].to_sql('Equity', con=engine, if_exists='replace')
         self.df_array[4].to_sql('Cash', con=engine, if_exists='replace')
-        return [engine, session]
+        return [self.df_array, self.file_array, engine, session]
