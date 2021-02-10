@@ -32,10 +32,10 @@ class SecuritySpider(EdgaRequesta):
         for index, row in enumerate(soup.table.find_all('tr')):
 
             cols = row.find_all('td')
-            if len(cols) >= 1:
+            if cols is not None:
                 cols[0] = cols[0].split(':')[0]
-            if len(cols) > 1:
-                cols[1] = cols[1].split(',')[0].split('-')[0]
+                if len(cols) > 1:
+                    cols[1] = cols[1].split(',')[0].split('-')[0]
             th_rows = row.find_all('th')
             st_rows = row.find_all('strong')
             pl = row.find_all(attrs={'class': 'pl'})
