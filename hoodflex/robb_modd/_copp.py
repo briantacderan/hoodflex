@@ -17,9 +17,8 @@ six_mo_ahead = f'{month}/{day}/{str(int(year)+1)}'
 class DataFormatter:
     def __init__(self, ticker, date_points, start=start):
         self.df = web.get_data_yahoo(ticker, start, today)
-        self.now = today
+        self.today = today
         self.start = start
-        self.start_fixed = six_mo_ago
         self.today_fixed = today_fixed
         self.end_fixed = six_mo_ahead
         self.ticker = ticker
