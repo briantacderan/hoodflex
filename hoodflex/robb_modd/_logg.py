@@ -35,8 +35,8 @@ class WidgetForecaster(GradientIterator):
         formatter = FuncFormatter(self.add_dollar)
         stock_X = df['Scaled Date'] * 2
         stock_Y = df['Close']
-        b, m = self.optimize()
-        new_X, new_Y = self.new_axis_values(self.opt_y_int, self.opt_slope)
+        self.optimize()
+        new_X, new_Y = self.new_axis_values()
         high_Y = [self.opt_slope*x + self.opt_y_int for x in new_X]
         return [formatter, stock_X, stock_Y, new_X, new_Y, high_Y]
         
