@@ -37,21 +37,21 @@ class WidgetForecaster(GradientIterator):
         stock_X = df['Scaled Date'] * 2
         stock_Y = df['Close']
         b, m = self.optimize()
-        new_X, new_Y = self.new_axis_values(b, m)
-        high_Y = [m*x + b for x in new_X]
-        return [formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y]
+        new_X, new_Y = self.new_axis_values(self.opt_y_int, self.opt_slope)
+        high_Y = [self.opt_slope*x + self.opt_y_int for x in new_X]
+        return [formatter, stock_X, stock_Y, new_X, new_Y, high_Y]
         
     def full_plot(self):
-        formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodflex()
-        forecast_1 = '{0:.2f}'.format(m*self.plt_value_2 + b)
-        forecast_2 = '{0:.2f}'.format(m*self.plt_value_3 + b)
+        formatter, stock_X, stock_Y, new_X, new_Y, high_Y = self.initialize_hoodflex()
+        forecast_1 = '{0:.2f}'.format(self.opt_slope*self.plt_value_2 + self.opt_y_int)
+        forecast_2 = '{0:.2f}'.format(self.opt_slope*self.plt_value_3 + self.opt_y_int)
         self.ax.set_title(f'{self.ticker} Forecast ({self.today_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_value_2, m*(self.plt_value_2) + b, 's')
-        self.ax.plot(self.plt_value_3, m*(self.plt_value_3) + b, 's')
+        self.ax.plot(self.plt_value_2, self.opt_slope*(self.plt_value_2) + self.opt_y_int, 's')
+        self.ax.plot(self.plt_value_3, self.opt_slope*(self.plt_value_3) + self.opt_y_int, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
