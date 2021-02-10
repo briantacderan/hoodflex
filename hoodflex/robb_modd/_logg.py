@@ -32,7 +32,7 @@ class WidgetForecaster(GradientIterator):
     def initialize_hoodflex(self):
         df = self.full_dataframe()
         formatter = FuncFormatter(self.add_dollar)
-        stock_X = df['Scaled Date']
+        stock_X = df['Scaled Date'] * 2 
         stock_Y = df['Close']
         b, m = self.optimize()
         new_X, new_Y = self.new_axis_values(b, m)
@@ -80,7 +80,7 @@ class WidgetForecaster(GradientIterator):
         
         date_slider = SelectionRangeSlider(
             options=tick_options,
-            index=(0, 24),
+            index=(0, 12),
             description='Date:',
             disabled=False
         )
