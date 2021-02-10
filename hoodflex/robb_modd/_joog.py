@@ -42,8 +42,8 @@ class GradientIterator(GradientProcessor):
     def optimize(self): 
         self.edit_x = self.x.pop(0)
         self.edit_y = self.y.pop(0)
-        self.edit_x.append(self.edit_x[-1]+0.01)
-        self.edit_x.append(self.edit_y[-1]+0.01)
+        self.edit_x.append(float(self.edit_x[-1])+0.01)
+        self.edit_x.append(float(self.edit_y[-1])+0.01)
         b = 0
         m = 0
         for i in range(self.num_iterations):
