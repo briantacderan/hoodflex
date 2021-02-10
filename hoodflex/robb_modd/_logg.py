@@ -48,8 +48,8 @@ class WidgetForecaster(GradientIterator):
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_value_2, m*self.plt_value_2 + b, 's')
-        self.ax.plot(self.plt_value_2+5, (m*self.plt_value_2 + b)+5, 's')
+        self.ax.plot(self.plt_value_1+5, m*(self.plt_value_1+5) + b, 's')
+        self.ax.plot(self.plt_value_2+5, m*(self.plt_value_2+5) + b, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
