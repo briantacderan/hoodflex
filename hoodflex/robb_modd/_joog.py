@@ -10,6 +10,8 @@ class GradientProcessor(DataFrameGenerator):
         N = len(self.x)
         difference = 0
         for i in range(N):
+            if i == 0:
+                continue
             x_val = self.x[i]
             y_val = self.y[i]
             difference += (y_val - ((m * x_val) + b))
@@ -20,6 +22,8 @@ class GradientProcessor(DataFrameGenerator):
         N = len(self.x)
         difference = 0
         for i in range(N):
+            if i == 0:
+                continue
             x_val = self.x[i]
             y_val = self.y[i]
             difference += x_val * (y_val - ((m * x_val) + b))
