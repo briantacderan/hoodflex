@@ -44,7 +44,7 @@ class GradientIterator(GradientProcessor):
         m = 0
         for i in range(self.num_iterations):
             b, m = self.step_gradient(b, m)
-        self.opt_slope = b
-        self.opt_y_int = m
+        self.opt_y_int = b
+        self.opt_slope = m
         return [b, m]
  
