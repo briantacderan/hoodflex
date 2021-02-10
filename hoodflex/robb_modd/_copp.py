@@ -18,7 +18,7 @@ class DataFormatter:
     def __init__(self, ticker, date_points, start=start):
         self.df = web.get_data_yahoo(ticker, start, today)
         self.now = today
-        self.date_points = date_points.append(start)
+        self.date_points = date_points.append(start).sort()
         self.start = start
         self.start_fixed = six_mo_ago
         self.today_fixed = today_fixed
