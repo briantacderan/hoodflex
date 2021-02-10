@@ -19,7 +19,8 @@ class WidgetForecaster(GradientIterator):
         self.plt_value_3 = 5.0
         
     def new_axis_values(self, b, m):
-        range_X = 10
+        range_X = 9.5
+        b = b - 5
         new_X = list(self.x*2)
         new_X.append(range_X)
         new_Y = list(self.y)
