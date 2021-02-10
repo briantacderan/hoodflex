@@ -33,7 +33,7 @@ class SecuritySpider(EdgaRequesta):
 
             cols = row.find_all('td')
             if len(cols) >= 1:
-                cols[1] = cols[1].split(':')[0]
+                cols[0] = cols[0].split(':')[0]
             if len(cols) > 1:
                 cols[1] = cols[1].split(',')[0].split('-')[0]
             th_rows = row.find_all('th')
