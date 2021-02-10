@@ -3,15 +3,15 @@ from hoodflex.robb_modd._copp import DataFrameGenerator
 class GradientProcessor(DataFrameGenerator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
-        self.x = self.get_X()
-        self.y = self.get_Y()
+        self.X = self.get_X()
+        self.Y = self.get_Y()
 
     def get_b_gradient(self, b, m):
-        N = len(self.edit_x)
+        N = len(self.edit_X)
         difference = 0
         for i in range(N):
-            x_val = self.edit_x[i]
-            y_val = self.edit_y[i]
+            x_val = self.edit_X[i]
+            y_val = self.edit_Y[i]
             difference += (y_val - ((m * x_val) + b))
         b_gradient = -(2 / N) * difference
         return b_gradient
