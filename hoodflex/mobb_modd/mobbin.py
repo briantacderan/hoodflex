@@ -153,7 +153,7 @@ class Mobbin(GoodLook):
         last = '\n\n\n' + '-'*100 + '\n\n\n\n\n\n\n'
         return f'{line1}{line_titles}{last}'
         
-    def complete_scrape(self, csv=False, df_title=None):
+    def complete_scrape(self, csv=False, df_title='RAND'):
         maybe = False
         for i in range(len(self.titles)):
             title_split = self.titles[i].upper().split(' ')
@@ -170,7 +170,7 @@ class Mobbin(GoodLook):
         df = self.statements[statement_name]
         filename = None
         if csv:
-            filename = f'./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv'
+            filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
             df.to_csv(filename)
         df_copy = df.copy()
         df_styled = self.style_table(df_copy, statement_name)
