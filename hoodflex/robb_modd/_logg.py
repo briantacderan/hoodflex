@@ -12,12 +12,10 @@ import datetime as dt
 from hoodflex.robb_modd._joog import GradientIterator
 
 class WidgetForecaster(GradientIterator):
-    def __init__(self, ticker, start, date_points, **kwargs):
-        super().__init__(ticker, start, date_points, **kwargs)
+    def __init__(self, ticker, date_points, **kwargs):
+        super().__init__(ticker, date_points, **kwargs)
         self.plt_value_1 = 0.0
         self.plt_value_2 = 18.0
-        self.plt_label_1 = '08/10/2020'
-        self.plt_label_2 = '08/10/2021'
         
     def new_axis_values(self, b, m):
         range_X = 18
@@ -45,7 +43,7 @@ class WidgetForecaster(GradientIterator):
         formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodflex()
         forecast_1 = '{0:.2f}'.format(m*self.plt_value_1 + b)
         forecast_2 = '{0:.2f}'.format(m*self.plt_value_2 + b)
-        self.ax.set_title(f'{self.ticker} Forecast ({self.plt_label_1}: \${forecast_1} - {self.plt_label_2}: \${forecast_2})\n', fontsize=20)
+        self.ax.set_title(f'{self.ticker} Forecast ({self.start_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
@@ -61,8 +59,8 @@ class WidgetForecaster(GradientIterator):
             self.plt_value_1 = change.new[0]
             self.plt_value_2 = change.new[1]
         else:
-            self.plt_label_1 = change.new[0]
-            self.plt_label_2 = change.new[1]
+            self.start_fixed = change.new[0]
+            self.end_fixed = change.new[1]
         ###
         self.full_plot()
         

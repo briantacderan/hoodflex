@@ -1,8 +1,8 @@
 from hoodflex.robb_modd._copp import DataFrameGenerator
 
 class GradientProcessor(DataFrameGenerator):
-    def __init__(self, ticker, start, date_points, **kwargs):
-        super().__init__(ticker, start, date_points, **kwargs)
+    def __init__(self, ticker, date_points, **kwargs):
+        super().__init__(ticker, date_points, **kwargs)
         self.x = DataFrameGenerator.get_X(self)
         self.y = DataFrameGenerator.get_Y(self)
 
@@ -27,8 +27,8 @@ class GradientProcessor(DataFrameGenerator):
         return m_gradient
     
 class GradientIterator(GradientProcessor):
-    def __init__(self, ticker, start, date_points, learning_rate=0.01, num_iterations=1000, **kwargs):
-        super().__init__(ticker, start, date_points, **kwargs)
+    def __init__(self, ticker, date_points, learning_rate=0.01, num_iterations=1000, **kwargs):
+        super().__init__(ticker, date_points, **kwargs)
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
 

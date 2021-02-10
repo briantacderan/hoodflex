@@ -4,11 +4,24 @@ import pandas_datareader as web
 import matplotlib.dates as mdates
 import datetime as dt
 
+today = dt.datetime.now()
+month = today.month-6 if today.month > 6 else today.month+6
+year = str(today.year) if today.month > 6 else str(today.year-1)
+start = dt.datetime(int(year), month, today.day)
+month = '0' + str(month) if month < 10 else str(month)
+day = '0' + str(today.day) if today.day < 10 else str(today.day)
+six_mo_ago = f'{month}/{day}/{year}'
+six_mo_ahead = f'{month}/{day}/{str(int(year)+1)}'
+
 class DataFormatter:
-    def __init__(self, ticker, start, date_points):
-        self.df = web.get_data_yahoo(ticker, start, dt.datetime.now())
+    def __init__(self, ticker, date_points, start=start):
+        self.df = web.get_data_yahoo(ticker, start, today)
+        self.now = today
         self.date_points = date_points
         self.start = start
+        self.start_fixed = six_mo_ago
+        self.end_fixed = six_mo_ahead
+        self.today = today
         self.ticker = ticker
         
     def format_dates(self, dates):
@@ -28,8 +41,8 @@ class DataFormatter:
         return scaled_dates
         
 class DataFrameGenerator(DataFormatter):
-    def __init__(self, ticker, start, date_points, **kwargs):
-        super().__init__(ticker, start, date_points, **kwargs)
+    def __init__(self, ticker, date_points, **kwargs):
+        super().__init__(ticker, date_points, **kwargs)
         
     def full_dataframe(self):
         df = self.df.copy()
