@@ -19,7 +19,7 @@ setup(name="hoodflex",
           "beautifulsoup4==4.9.3",
           "DateTime==4.3",
           "ipywidgets==7.6.3",
-          "matplotlib==3.3.3",
+          "matplotlib==3.3.4",
           "pandas-datareader==0.9.0"
       ],
       test_suite="nose.collector",
