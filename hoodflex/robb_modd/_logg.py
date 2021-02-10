@@ -15,11 +15,11 @@ class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
         self.plt_value_1 = 0.0
-        self.plt_value_2 = 5.0
-        self.plt_value_3 = 10
+        self.plt_value_2 = 3.5
+        self.plt_value_3 = 7.0
         
     def new_axis_values(self):
-        range_X = 10
+        range_X = 7
         new_X = list(self.x*2)
         new_X.append(range_X)
         new_Y = list(self.y)
@@ -76,13 +76,13 @@ class WidgetForecaster(GradientIterator):
         self.ax = ax
            
     def hoodflex_widget(self):
-        dates_1yr = list([self.start + dt.timedelta(days=i) for i in range(381)])
-        tick_options = [(dates_1yr[i].strftime('%m/%d/%Y'), i/40) \
-                        for i in range(len(dates_1yr)) if i % 20 == 0]
+        dates_1yr = list([self.start + dt.timedelta(days=i) for i in range(382)])
+        tick_options = [(dates_1yr[i].strftime('%m/%d/%Y'), i/26) \
+                        for i in range(len(dates_1yr)) if i % 13 == 0]
         
         date_slider = SelectionRangeSlider(
             options=tick_options,
-            index=(10, 20),
+            index=(7, 14),
             description='Date:',
             disabled=False
         )
