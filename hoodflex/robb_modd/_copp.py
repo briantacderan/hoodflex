@@ -33,7 +33,7 @@ class DataFormatter:
     def scaler_value(self):
         series = self.format_dates(self.date_points)
         origin_date = series[0]
-        scale_value = (series[1] - origin_date) #/ 2
+        scale_value = (series[1] - origin_date) / 2
         return [scale_value, origin_date]
                               
     def scale_dates(self, dates):                     
