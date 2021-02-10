@@ -40,10 +40,6 @@ class GradientIterator(GradientProcessor):
         return [step_b, step_m]
 
     def optimize(self, b=0, m=0): 
-        self.x.pop(0)
-        self.x.append(float(self.x[-1])*2)
-        self.y.pop(0)
-        self.y.append(float(self.y[-1])*2)
         for i in range(self.num_iterations):
             b, m = self.step_gradient(b, m)
         self.opt_b = b
