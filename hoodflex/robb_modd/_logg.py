@@ -20,9 +20,9 @@ class WidgetForecaster(GradientIterator):
         
     def new_axis_values(self):
         range_X = 9.5
-        new_X = list(self.x*2)
+        new_X = list(self.axis_x*2)
         new_X.append(range_X)
-        new_Y = list(self.y)
+        new_Y = list(self.axis_y)
         forecast_line = self.opt_m*range_X + self.opt_b
         new_Y.append(forecast_line)
         return [new_X, new_Y]
@@ -42,8 +42,8 @@ class WidgetForecaster(GradientIterator):
         
     def full_plot(self):
         formatter, stock_X, stock_Y, new_X, new_Y, high_Y = self.initialize_hoodflex()
-        forecast_1 = '{0:.2f}'.format(self.opt_slope*self.plt_2 + self.opt_b)
-        forecast_2 = '{0:.2f}'.format(self.opt_slope*self.plt_3 + self.opt_b)
+        forecast_1 = '{0:.2f}'.format(self.opt_m*self.plt_2 + self.opt_b)
+        forecast_2 = '{0:.2f}'.format(self.opt_m*self.plt_3 + self.opt_b)
         self.ax.set_title(f'{self.ticker} Forecast ({self.today_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
@@ -56,8 +56,8 @@ class WidgetForecaster(GradientIterator):
         clear_output(wait=True)
         self.ax.clear()
         if type(change.new[0]) == float:
-            self.plt_value_2 = change.new[0]
-            self.plt_value_3 = change.new[1]
+            self.plt_2 = change.new[0]
+            self.plt_3 = change.new[1]
         else:
             self.today_fixed = change.new[0]
             self.end_fixed = change.new[1]
