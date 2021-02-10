@@ -5,7 +5,7 @@ import matplotlib.dates as mdates
 import datetime as dt
 
 today = dt.datetime.now()
-today_fixed = f'{today.month}/{today.day}/{today.year}'
+today_fixed = f'{str(today.month)}/{str(today.day)}/{str(today.year)}'
 month = today.month-6 if today.month > 6 else today.month+6
 year = str(today.year) if today.month > 6 else str(today.year-1)
 start = dt.datetime(int(year), month, today.day)
