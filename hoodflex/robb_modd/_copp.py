@@ -12,6 +12,7 @@ start = dt.datetime(int(year), month, today.day)
 month = '0' + str(month) if month < 10 else str(month)
 day = '0' + str(today.day) if today.day < 10 else str(today.day)
 six_mo_ago = f'{month}/{day}/{year}'
+six_mo_ahead = f'{month}/{day}/{int(year+1)}'
 
 class DataFormatter:
     def __init__(self, ticker, date_points, start=start):
@@ -21,6 +22,7 @@ class DataFormatter:
         self.start = start
         self.start_fixed = six_mo_ago
         self.today_fixed = today_fixed
+        self.end_fixed = six_mo_ahead
         self.ticker = ticker
         
     def format_dates(self, dates):
