@@ -80,7 +80,7 @@ class WidgetForecaster(GradientIterator):
         
         date_slider = SelectionRangeSlider(
             options=tick_options,
-            index=(0, 12),
+            index=(0, 6),
             description='Date:',
             disabled=False
         )
