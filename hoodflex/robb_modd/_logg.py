@@ -14,8 +14,8 @@ from hoodflex.robb_modd._joog import GradientIterator
 class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
-        self.plt_value_1 = 0.0
-        self.plt_value_2 = 5.0
+        self.plt_value_1 = -5.0
+        self.plt_value_2 = 0.0
         
     def new_axis_values(self, b, m):
         range_X = 5
@@ -48,8 +48,8 @@ class WidgetForecaster(GradientIterator):
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_value_1, m*self.plt_value_1 + b, 's')
         self.ax.plot(self.plt_value_2, m*self.plt_value_2 + b, 's')
+        self.ax.plot(self.plt_value_2+5, (m*self.plt_value_2 + b)+5, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
