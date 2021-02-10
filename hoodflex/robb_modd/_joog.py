@@ -7,21 +7,21 @@ class GradientProcessor(DataFrameGenerator):
         self.y = DataFrameGenerator.get_Y(self)
 
     def get_b_gradient(self, b, m):
-        N = len(self.x) - 1
+        N = len(self.x)
         difference = 0
         for i in range(N):
-            x_val = self.x[i+1]
-            y_val = self.y[i+1]
+            x_val = self.x[i]
+            y_val = self.y[i]
             difference += (y_val - ((m * x_val) + b))
         b_gradient = -(2 / N) * difference
         return b_gradient
     
     def get_m_gradient(self, b, m):
-        N = len(self.x) - 1
+        N = len(self.x)
         difference = 0
         for i in range(N):
-            x_val = self.x[i+1]
-            y_val = self.y[i+1]
+            x_val = self.x[i]
+            y_val = self.y[i]
             difference += x_val * (y_val - ((m * x_val) + b))
         m_gradient = -(2 / N) * difference
         return m_gradient
