@@ -32,6 +32,7 @@ class SecuritySpider(EdgaRequesta):
         for index, row in enumerate(soup.table.find_all('tr')):
 
             cols = row.find_all('td')
+            cols[1] = cols[1].strip(',')[0].strip('-')[0]
             th_rows = row.find_all('th')
             st_rows = row.find_all('strong')
             pl = row.find_all(attrs={'class': 'pl'})
@@ -40,7 +41,7 @@ class SecuritySpider(EdgaRequesta):
             # if it's a regular row and not a section or a table header
             if len(th_rows) == 0 and len(st_rows) == 0:
                 ex = str(cols)
-                reg_row = [ele.text.strip().strip(',')[0] for ele in cols]
+                reg_row = [ele.text.strip() for ele in cols]
                 if 'defref_srt_ProductOrServiceAxis=us-gaap_' in ex:
                     sec_row = cols[0].text.strip()
                     statement_data['sections'].append(sec_row)
