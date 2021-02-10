@@ -20,7 +20,6 @@ class DataFormatter:
         self.date_points = date_points
         self.start = start
         self.start_fixed = six_mo_ago
-        self.end_fixed = six_mo_ahead
         self.today_fixed = today_fixed
         self.ticker = ticker
         
