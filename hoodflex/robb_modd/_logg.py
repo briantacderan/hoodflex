@@ -16,15 +16,14 @@ class WidgetForecaster(GradientIterator):
         super().__init__(ticker, date_points, **kwargs)
         self.plt_value_1 = 0.0
         self.plt_value_2 = 5.0
-        self.plt_value_3 = 10.0
+        self.plt_value_3 = 9.5
         
-    def new_axis_values(self, b, m):
+    def new_axis_values(self):
         range_X = 9.5
-        b -= 10
         new_X = list(self.x*2)
         new_X.append(range_X)
         new_Y = list(self.y)
-        forecast_line = m*range_X + b
+        forecast_line = self.opt_slope*range_X + self.opt_y_int
         new_Y.append(forecast_line)
         return [new_X, new_Y]
     
