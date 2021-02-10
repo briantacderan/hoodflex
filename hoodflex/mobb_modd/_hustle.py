@@ -40,7 +40,7 @@ class SecuritySpider(EdgaRequesta):
             # if it's a regular row and not a section or a table header
             if len(th_rows) == 0 and len(st_rows) == 0:
                 ex = str(cols)
-                reg_row = [ele.text.strip() for ele in cols]
+                reg_row = [ele.text.strip().strip(',')[0] for ele in cols]
                 if 'defref_srt_ProductOrServiceAxis=us-gaap_' in ex:
                     sec_row = cols[0].text.strip()
                     statement_data['sections'].append(sec_row)
