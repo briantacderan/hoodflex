@@ -42,7 +42,7 @@ class SecuritySpider(EdgaRequesta):
                 ex = str(cols)
                 reg_row = [ele.text.strip().split(', ')[0].split(' - ')[0].split(':')[0] for ele in cols]
                 if 'defref_srt_ProductOrServiceAxis=us-gaap_' in ex:
-                    sec_row = cols[0].text.strip()
+                    sec_row = cols[0].text.strip().split(':')[0]
                     statement_data['sections'].append(sec_row)
                     sec_index.append(index-displacement)
                     displacement += 1
@@ -60,7 +60,7 @@ class SecuritySpider(EdgaRequesta):
 
             # if it's a regular row and a section but not a table header
             elif len(th_rows) == 0 and len(st_rows) != 0:
-                sec_row = cols[0].text.strip()
+                sec_row = cols[0].text.strip().split(':')[0]
                 statement_data['sections'].append(sec_row)
                 sec_index.append(index-displacement)
                 displacement += 1
@@ -69,7 +69,7 @@ class SecuritySpider(EdgaRequesta):
 
             # finally if it's not any of those it must be a header
             elif len(th_rows) != 0:
-                hed_row = [ele.text.strip() for ele in th_rows]
+                hed_row = [ele.text.strip().split(':')[0] for ele in th_rows]
                 statement_data['headers'].append(hed_row)
                 displacement += 1
                 if index == 0:
