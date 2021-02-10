@@ -18,12 +18,14 @@ class DataFormatter:
     def __init__(self, ticker, date_points, start=start):
         self.df = web.get_data_yahoo(ticker, start, today)
         self.now = today
-        self.date_points = date_points.append(start)
         self.start = start
         self.start_fixed = six_mo_ago
         self.today_fixed = today_fixed
         self.end_fixed = six_mo_ahead
         self.ticker = ticker
+        self.date_points = [start]
+        for each in date_points:
+            self.date_points.append(each)
         
     def format_dates(self, dates):
         formatted = pd.Series(list(dates)).map(mdates.date2num)
