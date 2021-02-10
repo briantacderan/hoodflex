@@ -15,10 +15,10 @@ class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
         self.plt_value_1 = 0.0
-        self.plt_value_2 = 10.0
+        self.plt_value_2 = 5.0
         
     def new_axis_values(self, b, m):
-        range_X = 10
+        range_X = 5
         new_X = list(self.x)
         new_X.append(range_X)
         new_Y = list(self.y)
@@ -80,7 +80,7 @@ class WidgetForecaster(GradientIterator):
         
         date_slider = SelectionRangeSlider(
             options=tick_options,
-            index=(0, 20),
+            index=(0, 5),
             description='Date:',
             disabled=False
         )
