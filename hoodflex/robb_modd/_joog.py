@@ -39,12 +39,11 @@ class GradientIterator(GradientProcessor):
         step_m = m - (self.learning_rate * m_gradient)
         return [step_b, step_m]
 
-    def optimize(self):
+    def optimize(self):        
         b = 0
         m = 0
         for i in range(self.num_iterations):
             b, m = self.step_gradient(b, m)
-        self.opt_y_int = b
-        self.opt_slope = m
-        return [b, m]
+        self.opt_b = b
+        self.opt_m = m
  

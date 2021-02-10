@@ -14,16 +14,16 @@ from hoodflex.robb_modd._joog import GradientIterator
 class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
-        self.plt_value_1 = 0.0
-        self.plt_value_2 = 5.0
-        self.plt_value_3 = 9.5
+        self.plt_1 = 0.0
+        self.plt_2 = 5.0
+        self.plt_3 = 9.5
         
     def new_axis_values(self):
         range_X = 9.5
         new_X = list(self.x*2)
         new_X.append(range_X)
         new_Y = list(self.y)
-        forecast_line = self.opt_slope*range_X + self.opt_y_int
+        forecast_line = self.opt_m*range_X + self.opt_b
         new_Y.append(forecast_line)
         return [new_X, new_Y]
     
@@ -37,32 +37,30 @@ class WidgetForecaster(GradientIterator):
         stock_Y = df['Close']
         self.optimize()
         new_X, new_Y = self.new_axis_values()
-        high_Y = [self.opt_slope*x + self.opt_y_int for x in new_X]
+        high_Y = [self.opt_m*x + self.opt_b for x in new_X]
         return [formatter, stock_X, stock_Y, new_X, new_Y, high_Y]
         
     def full_plot(self):
         formatter, stock_X, stock_Y, new_X, new_Y, high_Y = self.initialize_hoodflex()
-        forecast_1 = '{0:.2f}'.format(self.opt_slope*self.plt_value_2 + self.opt_y_int)
-        forecast_2 = '{0:.2f}'.format(self.opt_slope*self.plt_value_3 + self.opt_y_int)
+        forecast_1 = '{0:.2f}'.format(self.opt_slope*self.plt_2 + self.opt_b)
+        forecast_2 = '{0:.2f}'.format(self.opt_slope*self.plt_3 + self.opt_b)
         self.ax.set_title(f'{self.ticker} Forecast ({self.today_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_value_2, self.opt_slope*(self.plt_value_2) + self.opt_y_int, 's')
-        self.ax.plot(self.plt_value_3, self.opt_slope*(self.plt_value_3) + self.opt_y_int, 's')
+        self.ax.plot(self.plt_2, self.opt_m*(self.plt_2) + self.opt_b, 's')
+        self.ax.plot(self.plt_3, self.opt_m*(self.plt_3) + self.opt_b, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
         self.ax.clear()
-        ###
         if type(change.new[0]) == float:
             self.plt_value_2 = change.new[0]
             self.plt_value_3 = change.new[1]
         else:
             self.today_fixed = change.new[0]
             self.end_fixed = change.new[1]
-        ###
         self.full_plot()
         
     def plot_setup(self):
