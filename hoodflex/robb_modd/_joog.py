@@ -10,18 +10,18 @@ class GradientProcessor(DataFrameGenerator):
         N = len(self.edit_X)
         difference = 0
         for i in range(N):
-            x_val = self.edit_X[i]
-            y_val = self.edit_Y[i]
+            x_val = self.x[i]
+            y_val = self.y[i]
             difference += (y_val - ((m * x_val) + b))
         b_gradient = -(2 / N) * difference
         return b_gradient
     
     def get_m_gradient(self, b, m):
-        N = len(self.edit_x)
+        N = len(self.x)
         difference = 0
         for i in range(N):
-            x_val = self.edit_x[i]
-            y_val = self.edit_y[i]
+            x_val = self.x[i]
+            y_val = self.y[i]
             difference += x_val * (y_val - ((m * x_val) + b))
         m_gradient = -(2 / N) * difference
         return m_gradient
@@ -39,13 +39,9 @@ class GradientIterator(GradientProcessor):
         step_m = m - (self.learning_rate * m_gradient)
         return [step_b, step_m]
 
-    def optimize(self): 
-        self.edit_x = self.x.pop(0)
-        self.edit_y = self.y.pop(0)
-        self.edit_x.append(float(self.edit_x[-1])+0.15)
-        self.edit_x.append(float(self.edit_y[-1])+0.15)
-        b = 0
-        m = 0
+    def optimize(self, b=0, m=0): 
+        self.x.pop(0).append(float(self.x[-1])*2)
+        self.y.pop(0).append(float(self.y[-1])*2)
         for i in range(self.num_iterations):
             b, m = self.step_gradient(b, m)
         self.opt_b = b
