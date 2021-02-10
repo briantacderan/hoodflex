@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: hoodflex
+Version: 0.0.1
+Summary: Python package/library that parses SEC Statements and Yahoo! stock data for financial analysis
+Home-page: https://github.com/briantacderan/hoodflex
+Author: Brian Tacderan
+Author-email: briantacderan@gmail.com
+License: MIT
+Description: <img src="https://i.ibb.co/1rJYWSC/download.png" style="width: 100%;" />
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: macOS Catalina
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
