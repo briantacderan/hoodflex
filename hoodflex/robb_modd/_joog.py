@@ -3,8 +3,6 @@ from hoodflex.robb_modd._copp import DataFrameGenerator
 class GradientProcessor(DataFrameGenerator):
     def __init__(self, ticker, date_points, **kwargs):
         super().__init__(ticker, date_points, **kwargs)
-        self.x = self.get_X()
-        self.y = self.get_Y()
 
     def get_b_gradient(self, b, m):
         N = len(self.edit_X)
@@ -40,6 +38,8 @@ class GradientIterator(GradientProcessor):
         return [step_b, step_m]
 
     def optimize(self, b=0, m=0): 
+        self.x = self.get_X()
+        self.y = self.get_Y()
         self.x.pop(0).append(float(self.x[-1])*2)
         self.y.pop(0).append(float(self.y[-1])*2)
         for i in range(self.num_iterations):

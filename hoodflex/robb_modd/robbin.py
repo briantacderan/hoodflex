@@ -126,8 +126,3 @@ class Robbin(WidgetForecaster):
         ----------------------------------------------------------------
         ----------------------------------------------------------------
         """
-    
-    def __repr__(self):
-        line1 = f'Best fit y-intercept: {self.opt_b}'
-        line2 = f'Best fit slope: {self.opt_m}'
-        return f'\n\n{line1}\n{line2}\n\n\n\n'
