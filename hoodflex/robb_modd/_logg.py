@@ -20,7 +20,7 @@ class WidgetForecaster(GradientIterator):
         self.plt_label_2 = '08/10/2021'
         
     def new_axis_values(self, b, m):
-        range_X = 37
+        range_X = 18
         new_X = list(self.x)
         new_X.append(range_X)
         new_Y = list(self.y)
