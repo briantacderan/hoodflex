@@ -20,7 +20,7 @@ class WidgetForecaster(GradientIterator):
         
     def new_axis_values(self, b, m):
         self.plt_value_3 = 5.0
-        new_X = list(self.x*2)
+        new_X = list(self.x)
         new_X.append(self.plt_value_3)
         new_Y = list(self.y)
         forecast_line = m*self.plt_value_3 + b
