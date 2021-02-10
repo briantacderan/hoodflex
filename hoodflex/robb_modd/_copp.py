@@ -23,9 +23,9 @@ class DataFormatter:
         self.today_fixed = today_fixed
         self.end_fixed = six_mo_ahead
         self.ticker = ticker
-        self.date_points = [start]
-        for each in date_points:
-            self.date_points.append(each)
+        self.date_points = date_points # [start]
+        # for each in date_points:
+        #     self.date_points.append(each)
         
     def format_dates(self, dates):
         formatted = pd.Series(list(dates)).map(mdates.date2num)
