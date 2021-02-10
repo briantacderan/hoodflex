@@ -76,7 +76,7 @@ class WidgetForecaster(GradientIterator):
         self.fig = fig
         self.ax = ax
            
-    def hoodcast_widget(self):
+    def hoodflex_widget(self):
         dates_4yr = list([self.start + dt.timedelta(days=i) for i in range(1291)])
         tick_options = [(dates_4yr[i].strftime('%m/%d/%Y'), i/40) for i in range(len(dates_4yr)) if i % 20 == 0]
         
