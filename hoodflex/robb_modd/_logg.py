@@ -16,14 +16,15 @@ class WidgetForecaster(GradientIterator):
         super().__init__(ticker, date_points, **kwargs)
         self.plt_value_1 = -5.0
         self.plt_value_2 = 0.0
+        self.plt_value_3 = 5.0
         
     def new_axis_values(self, b, m):
-        range_X = 5
+        self.plt_value_3 = 5.0
         new_X = list(self.x*2)
-        new_X.append(range_X)
+        new_X.append(self.plt_value_3)
         new_Y = list(self.y)
-        two_year_future = m*range_X + b
-        new_Y.append(two_year_future)
+        forecast_line = m*self.plt_value_3 + b
+        new_Y.append(forecast_line)
         return [new_X, new_Y]
     
     def add_dollar(self, x, pos):
@@ -41,23 +42,23 @@ class WidgetForecaster(GradientIterator):
         
     def full_plot(self):
         formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodflex()
-        forecast_1 = '{0:.2f}'.format(m*self.plt_value_1 + b)
-        forecast_2 = '{0:.2f}'.format(m*self.plt_value_2 + b)
+        forecast_1 = '{0:.2f}'.format(m*self.plt_value_2 + b)
+        forecast_2 = '{0:.2f}'.format(m*self.plt_value_3 + b)
         self.ax.set_title(f'{self.ticker} Forecast ({self.today_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_value_1+5, m*(self.plt_value_1+5) + b, 's')
-        self.ax.plot(self.plt_value_2+5, m*(self.plt_value_2+5) + b, 's')
+        self.ax.plot(self.plt_value_2, m*(self.plt_value_2) + b, 's')
+        self.ax.plot(self.plt_value_3, m*(self.plt_value_3) + b, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
         self.ax.clear()
         ###
         if type(change.new[0]) == float:
-            self.plt_value_1 = change.new[0]
-            self.plt_value_2 = change.new[1]
+            self.plt_value_2 = change.new[0]
+            self.plt_value_3 = change.new[1]
         else:
             self.today_fixed = change.new[0]
             self.end_fixed = change.new[1]
