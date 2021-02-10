@@ -19,7 +19,7 @@ class WidgetForecaster(GradientIterator):
         
     def new_axis_values(self, b, m):
         range_X = 5
-        new_X = list(self.x)
+        new_X = list(self.x*2)
         new_X.append(range_X)
         new_Y = list(self.y)
         two_year_future = m*range_X + b
