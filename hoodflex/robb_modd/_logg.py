@@ -15,8 +15,8 @@ class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, **kwargs):
         super().__init__(ticker, **kwargs)
         self.plt_1 = 0.0
-        self.plt_2 = 15.0
-        self.plt_3 = 30.0
+        self.plt_2 = 30.0
+        self.plt_3 = 60.0
         
     def new_axis_values(self, b, m):
         range_X = 30
