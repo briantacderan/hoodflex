@@ -15,11 +15,11 @@ class WidgetForecaster(GradientIterator):
     def __init__(self, ticker, **kwargs):
         super().__init__(ticker, **kwargs)
         self.plt_1 = 0.0
-        self.plt_2 = 5.0
-        self.plt_3 = 9.5
+        self.plt_2 = 10
+        self.plt_3 = 20
         
     def new_axis_values(self, b, m):
-        range_X = 9.5
+        range_X = 20
         new_X = list(self.x)
         new_X.append(range_X)
         new_Y = list(self.y)
@@ -33,7 +33,7 @@ class WidgetForecaster(GradientIterator):
     def initialize_hoodflex(self):
         df = self.full_dataframe()
         formatter = FuncFormatter(self.add_dollar)
-        stock_X = df['Scaled Date'] * 2
+        stock_X = df['Scaled Date']
         stock_Y = df['Close']
         b, m = self.optimize()
         new_X, new_Y = self.new_axis_values(b, m)
