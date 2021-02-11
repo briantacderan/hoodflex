@@ -5,9 +5,7 @@ class GradientProcessor(DataFrameGenerator):
         super().__init__(ticker, **kwargs)
         self.x = self.get_X()
         self.y = self.get_Y()
-        # self.x = DataFrameGenerator.get_X(self)
-        # self.y = DataFrameGenerator.get_Y(self)
-
+        
     def get_b_gradient(self, b, m):
         N = len(self.x)
         difference = 0
