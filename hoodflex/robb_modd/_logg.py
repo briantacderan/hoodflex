@@ -30,7 +30,7 @@ class WidgetForecaster(GradientIterator):
     def add_dollar(self, x, pos):
         return '$%1.2f' % (x)
     
-    def initialize_hoodcast(self):
+    def initialize_hoodflex(self):
         df = self.full_dataframe()
         formatter = FuncFormatter(self.add_dollar)
         stock_X = df['Scaled Date']                        # *2
@@ -41,7 +41,7 @@ class WidgetForecaster(GradientIterator):
         return [formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y]
         
     def full_plot(self):
-        formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodcast()
+        formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodflex()
         forecast_1 = '{0:.2f}'.format(m*self.plt_2 + b)
         forecast_2 = '{0:.2f}'.format(m*self.plt_3 + b)
         self.ax.set_title(f'{self.ticker} Forecast ({self.ftoday}: \${forecast_1} - {self.ffuture}: \${forecast_2})\n', fontsize=20)
@@ -75,7 +75,7 @@ class WidgetForecaster(GradientIterator):
         self.fig = fig
         self.ax = ax
            
-    def hoodcast_widget(self):
+    def hoodflex_widget(self):
         one_year = list([self.start + dt.timedelta(days=i) for i in range(364)])
         tick_options = [(one_year[i].strftime('%m/%d/%Y'), i/38) for i in range(len(one_year)) if i % 19 == 0]
         
