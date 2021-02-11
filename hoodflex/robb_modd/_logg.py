@@ -77,7 +77,7 @@ class WidgetForecaster(GradientIterator):
            
     def hoodflex_widget(self):
         one_year = list([self.start + dt.timedelta(days=i) for i in range(364)])
-        tick_options = [(one_year[i].strftime('%m/%d/%Y'), i/40) for i in range(len(one_year)) if i % 20 == 0]
+        tick_options = [(one_year[i].strftime('%m/%d/%Y'), i/30) for i in range(len(one_year)) if i % 15 == 0]
         
         date_slider = SelectionRangeSlider(
             options=tick_options,
