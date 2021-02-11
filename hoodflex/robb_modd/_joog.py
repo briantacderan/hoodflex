@@ -3,8 +3,8 @@ from hoodflex.robb_modd._copp import DataFrameGenerator
 class GradientProcessor(DataFrameGenerator):
     def __init__(self, ticker, **kwargs):
         super().__init__(ticker, **kwargs)
-        self.x = DataFrameGenerator.get_X(self)
-        self.y = DataFrameGenerator.get_Y(self)
+        self.x = self.get_X()
+        self.y = self.get_Y()
         # self.x = DataFrameGenerator.get_X(self)
         # self.y = DataFrameGenerator.get_Y(self)
 
