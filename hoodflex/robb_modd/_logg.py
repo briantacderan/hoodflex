@@ -12,8 +12,8 @@ import datetime as dt
 from hoodflex.robb_modd._joog import GradientIterator
 
 class WidgetForecaster(GradientIterator):
-    def __init__(self, ticker, start, date_points, **kwargs):
-        super().__init__(ticker, start, date_points, **kwargs)
+    def __init__(self, ticker, **kwargs):
+        super().__init__(ticker, **kwargs)
         self.plt_1 = 0.0
         self.plt_2 = 5.0
         self.plt_3 = 9.5
