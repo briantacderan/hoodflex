@@ -1,10 +1,12 @@
 from hoodflex.robb_modd._copp import DataFrameGenerator
 
 class GradientProcessor(DataFrameGenerator):
-    def __init__(self, ticker, date_points, **kwargs):
-        super().__init__(ticker, date_points, **kwargs)
-        self.x = self.get_X()
-        self.y = self.get_Y()
+    def __init__(self, ticker, **kwargs):
+        super().__init__(ticker, **kwargs)
+        self.x = DataFrameGenerator.get_X(self)
+        self.y = DataFrameGenerator.get_Y(self)
+        # self.x = DataFrameGenerator.get_X(self)
+        # self.y = DataFrameGenerator.get_Y(self)
 
     def get_b_gradient(self, b, m):
         N = len(self.x)
@@ -27,8 +29,8 @@ class GradientProcessor(DataFrameGenerator):
         return m_gradient
     
 class GradientIterator(GradientProcessor):
-    def __init__(self, ticker, date_points, learning_rate=0.01, num_iterations=1000, **kwargs):
-        super().__init__(ticker, date_points, **kwargs)
+    def __init__(self, ticker, learning_rate=0.01, num_iterations=1000, **kwargs):
+        super().__init__(ticker, **kwargs)
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
 
@@ -39,9 +41,12 @@ class GradientIterator(GradientProcessor):
         step_m = m - (self.learning_rate * m_gradient)
         return [step_b, step_m]
 
-    def optimize(self, b=0, m=0): 
+    def optimize(self):
+        b = 0
+        m = 0
         for i in range(self.num_iterations):
             b, m = self.step_gradient(b, m)
         self.opt_b = b
         self.opt_m = m
+        return [b, m]
  

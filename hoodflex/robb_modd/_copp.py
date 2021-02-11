@@ -3,28 +3,26 @@ import pandas as pd
 import pandas_datareader as web
 import matplotlib.dates as mdates
 import datetime as dt
-
-today = dt.datetime.now()
-today_fixed = f'{str(today.month)}/{str(today.day)}/{str(today.year)}'
-month = today.month-6 if today.month > 6 else today.month+6
-year = str(today.year) if today.month > 6 else str(today.year-1)
-start = dt.datetime(int(year), month, today.day)
-month = '0' + str(month) if month < 10 else str(month)
-day = '0' + str(today.day) if today.day < 10 else str(today.day)
-six_mo_ago = f'{month}/{day}/{year}'
-six_mo_ahead = f'{month}/{day}/{str(int(year)+1)}'
+from dateutil.relativedelta import relativedelta
 
 class DataFormatter:
-    def __init__(self, ticker, date_points, start=start):
-        self.df = web.get_data_yahoo(ticker, start, today)
-        self.today = today
-        self.start = start
-        self.today_fixed = today_fixed
-        self.end_fixed = six_mo_ahead
+    def __init__(self, ticker, date_points=None, today=dt.datetime.now()):
         self.ticker = ticker
-        self.date_points = [start]
-        for each in date_points:
-            self.date_points.append(each)
+        self.today = today
+        start = today - relativedelta(months=6)
+        self.start = start
+        self.future = today + relativedelta(months=6)
+        if date_points is None:
+            new_time = today
+            date_points = [today]
+            for i in range(5):
+                fortnite = dt.timedelta(days=14)
+                new_time += fortnite
+                date_points.append(new_time)
+        self.date_points = date_points
+        self.ftoday = today.strftime('%m/%d/%Y')
+        self.ffuture = (today + relativedelta(months=6)).strftime('%m/%d/%Y')
+        self.df = web.get_data_yahoo(ticker, start, today)
         
     def format_dates(self, dates):
         formatted = pd.Series(list(dates)).map(mdates.date2num)
@@ -43,8 +41,8 @@ class DataFormatter:
         return scaled_dates
         
 class DataFrameGenerator(DataFormatter):
-    def __init__(self, ticker, date_points, **kwargs):
-        super().__init__(ticker, date_points, **kwargs)
+    def __init__(self, ticker, **kwargs):
+        super().__init__(ticker, **kwargs)
         
     def full_dataframe(self):
         df = self.df.copy()

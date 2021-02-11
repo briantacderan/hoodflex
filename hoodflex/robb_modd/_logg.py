@@ -12,55 +12,57 @@ import datetime as dt
 from hoodflex.robb_modd._joog import GradientIterator
 
 class WidgetForecaster(GradientIterator):
-    def __init__(self, ticker, date_points, **kwargs):
-        super().__init__(ticker, date_points, **kwargs)
+    def __init__(self, ticker, start, date_points, **kwargs):
+        super().__init__(ticker, start, date_points, **kwargs)
         self.plt_1 = 0.0
         self.plt_2 = 5.0
         self.plt_3 = 9.5
         
-    def new_axis_values(self):
+    def new_axis_values(self, b, m):
         range_X = 9.5
-        new_X = list(self.x*2)
+        new_X = list(self.x)                               # *2)
         new_X.append(range_X)
         new_Y = list(self.y)
-        forecast_line = self.opt_m*range_X + self.opt_b
-        new_Y.append(forecast_line)
+        two_year_future = m*range_X + b
+        new_Y.append(two_year_future)
         return [new_X, new_Y]
     
     def add_dollar(self, x, pos):
         return '$%1.2f' % (x)
     
-    def initialize_hoodflex(self):
+    def initialize_hoodcast(self):
         df = self.full_dataframe()
         formatter = FuncFormatter(self.add_dollar)
-        stock_X = df['Scaled Date'] * 2
+        stock_X = df['Scaled Date']                        # *2
         stock_Y = df['Close']
-        self.optimize()
-        new_X, new_Y = self.new_axis_values()
-        high_Y = [self.opt_m*x + self.opt_b for x in new_X]
-        return [formatter, stock_X, stock_Y, new_X, new_Y, high_Y]
+        b, m = self.optimize()
+        new_X, new_Y = self.new_axis_values(b, m)
+        high_Y = [m*x + b for x in new_X]
+        return [formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y]
         
     def full_plot(self):
-        formatter, stock_X, stock_Y, new_X, new_Y, high_Y = self.initialize_hoodflex()
-        forecast_1 = '{0:.2f}'.format(self.opt_m*self.plt_2 + self.opt_b)
-        forecast_2 = '{0:.2f}'.format(self.opt_m*self.plt_3 + self.opt_b)
-        self.ax.set_title(f'{self.ticker} Forecast ({self.today_fixed}: \${forecast_1} - {self.end_fixed}: \${forecast_2})\n', fontsize=20)
+        formatter, stock_X, stock_Y, b, m, new_X, new_Y, high_Y = self.initialize_hoodcast()
+        forecast_1 = '{0:.2f}'.format(m*self.plt_2 + b)
+        forecast_2 = '{0:.2f}'.format(m*self.plt_3 + b)
+        self.ax.set_title(f'{self.ticker} Forecast ({self.ftoday}: \${forecast_1} - {self.ffuture}: \${forecast_2})\n', fontsize=20)
         self.ax.yaxis.set_major_formatter(formatter)
         self.ax.plot(new_X, new_Y, 'o')
         self.ax.plot(new_X, high_Y)
         self.ax.plot(stock_X, stock_Y)
-        self.ax.plot(self.plt_2, self.opt_m*(self.plt_2) + self.opt_b, 's')
-        self.ax.plot(self.plt_3, self.opt_m*(self.plt_3) + self.opt_b, 's')
+        self.ax.plot(self.plt_2, m*self.plt_2 + b, 's')
+        self.ax.plot(self.plt_3, m*self.plt_3 + b, 's')
         
     def update_plot(self, change):
         clear_output(wait=True)
         self.ax.clear()
+
         if type(change.new[0]) == float:
             self.plt_2 = change.new[0]
             self.plt_3 = change.new[1]
         else:
-            self.today_fixed = change.new[0]
-            self.end_fixed = change.new[1]
+            self.ftoday = change.new[0]
+            self.ffuture = change.new[1]
+
         self.full_plot()
         
     def plot_setup(self):
@@ -73,10 +75,9 @@ class WidgetForecaster(GradientIterator):
         self.fig = fig
         self.ax = ax
            
-    def hoodflex_widget(self):
-        dates_1yr = list([self.start + dt.timedelta(days=i) for i in range(365)])
-        tick_options = [(dates_1yr[i].strftime('%m/%d/%Y'), i/38) \
-                        for i in range(len(dates_1yr)) if i % 19 == 0]
+    def hoodcast_widget(self):
+        one_year = list([self.start + dt.timedelta(days=i) for i in range(364)])
+        tick_options = [(one_year[i].strftime('%m/%d/%Y'), i/38) for i in range(len(one_year)) if i % 19 == 0]
         
         date_slider = SelectionRangeSlider(
             options=tick_options,

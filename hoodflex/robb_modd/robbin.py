@@ -6,8 +6,8 @@ import matplotlib.dates as mdates
 from hoodflex.robb_modd._logg import WidgetForecaster
 
 class Robbin(WidgetForecaster):
-    def __init__(self, ticker, date_points, **kwargs):
-        super().__init__(ticker, date_points, **kwargs)
+    def __init__(self, ticker, **kwargs):
+        super().__init__(ticker, **kwargs)
         
         """
         ----------------------------------------------------------------
