@@ -170,7 +170,7 @@ class Mobbin(GoodLook):
         df = self.statements[statement_name]
         filename = None
         if csv:
-            filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
+            filename = f"../static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
             df.to_csv(filename)
         df_copy = df.copy()
         df_styled = self.style_table(df_copy, statement_name)
