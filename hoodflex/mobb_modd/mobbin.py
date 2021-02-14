@@ -201,4 +201,4 @@ class Mobbin(GoodLook):
         for i in range(len(self.table_titles)):
             self.df_array[i].to_sql(self.table_titles[i], 
                                     con=engine, if_exists='replace')
-        return [self.df_array, self.file_array, engine, session]
+        return [self.df_array, self.file_array, self.table_titles, engine, session]
