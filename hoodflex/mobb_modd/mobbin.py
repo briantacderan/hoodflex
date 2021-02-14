@@ -154,38 +154,42 @@ class Mobbin(GoodLook):
         return f'{line1}{line_titles}{last}'
         
     def complete_scrape(self, csv=False, df_title='RAND'):
-        maybe = False
-        for i in range(len(self.titles)):
-            title_split = self.titles[i].upper().split(' ')
-            for j in range(len(title_split)):
-                if title_split[j] == df_title:
-                    index_maybe = i
-                    maybe = True
-                if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
-                    maybe = False
-                elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
-                    maybe = False
-                    index = index_maybe
-        statement_name = self.titles[index]
-        df = self.statements[statement_name]
-        filename = None
-        if csv:
-            filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
-            df.to_csv(filename)
-        df_copy = df.copy()
-        df_styled = self.style_table(df_copy, statement_name)
-        if filename:
-            return [df, filename]
-        else:    
-            return [df, df_styled]
+        try:
+            maybe = False
+            for i in range(len(self.titles)):
+                title_split = self.titles[i].upper().split(' ')
+                for j in range(len(title_split)):
+                    if title_split[j] == df_title:
+                        index_maybe = i
+                        maybe = True
+                    if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
+                        maybe = False
+                    elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
+                        maybe = False
+                        index = index_maybe
+            statement_name = self.titles[index]
+            df = self.statements[statement_name]
+            filename = None
+            if csv:
+                filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
+                df.to_csv(filename)
+            df_copy = df.copy()
+            df_styled = self.style_table(df_copy, statement_name)
+            if filename:
+                return [df, filename]
+            else:    
+                return [df, df_styled]
+        except: 
+            return [None, None]
             
     def statements_to_csv(self, df_titles=['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']):
         df_array = []
         file_array = []
         for i in range(len(df_titles)):
             df, file = self.complete_scrape(csv=True, df_title=df_titles[i])
-            df_array.append(df)
-            file_array.append(file)
+            if df is not None:
+                df_array.append(df)
+                file_array.append(file)
         return [df_array, file_array]
     
     def statements_to_sql(self):
