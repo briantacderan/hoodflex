@@ -185,20 +185,20 @@ class Mobbin(GoodLook):
     def statements_to_csv(self, df_titles=['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']):
         df_array = []
         file_array = []
+        table_titles = []
         for i in range(len(df_titles)):
             df, file = self.complete_scrape(csv=True, df_title=df_titles[i])
             if df is not None:
                 df_array.append(df)
                 file_array.append(file)
-        return [df_array, file_array]
+                table_titles.append(df_titles[i].lower().title())
+        return [df_array, file_array, table_titles]
     
     def statements_to_sql(self):
-        self.df_array, self.file_array = self.statements_to_csv()
+        self.df_array, self.file_array, self.table_titles = self.statements_to_csv()
         engine = create_engine('sqlite:///temp.db', echo=False)
         session = create_session(bind=engine, autocommit=False, autoflush=True)
-        self.df_array[0].to_sql('Balance', con=engine, if_exists='replace')
-        self.df_array[1].to_sql('Income', con=engine, if_exists='replace')
-        self.df_array[2].to_sql('Operation', con=engine, if_exists='replace')
-        self.df_array[3].to_sql('Equity', con=engine, if_exists='replace')
-        self.df_array[4].to_sql('Cash', con=engine, if_exists='replace')
+        for i in range(len(self.table_titles)):
+            self.df_array[i].to_sql(self.table_titles[i], 
+                                    con=engine, if_exists='replace')
         return [self.df_array, self.file_array, engine, session]
