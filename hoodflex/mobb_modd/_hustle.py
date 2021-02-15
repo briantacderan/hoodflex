@@ -41,6 +41,7 @@ class SecuritySpider(EdgaRequesta):
             if len(th_rows) == 0 and len(st_rows) == 0:
                 ex = str(cols)
                 reg_row = [ele.text.strip().split(', ')[0].split(' - ')[0].split(':')[0] for ele in cols]
+                reg_row = [int(ele) for ele in reg_row]
                 if 'defref_srt_ProductOrServiceAxis=us-gaap_' in ex:
                     sec_row = cols[0].text.strip().split(':')[0]
                     statement_data['sections'].append(sec_row)
