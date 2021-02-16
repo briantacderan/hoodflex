@@ -9,15 +9,15 @@ class Mobbin(GoodLook):
         self.statements, self.titles = self.dictionary_info()
         
         """
-        ----------------------------------------------------------------
-        ----------------------------------------------------------------
-        -----                                                      -----
-        -                    $$$$$$ hoodflex $$$$$$                    -
-        -                              X                               -
-        -                    $$$$$$$ mobbin $$$$$$$                    -
-        -----                                                      -----
-        ----------------------------------------------------------------
-        ----------------------------------------------------------------
+        --------------------------------------------------------------
+        --------------------------------------------------------------
+        -----                                                    -----
+        -                   $$$$$$ hoodflex $$$$$$                   -
+        -                             X                              -
+        -                   $$$$$$$ mobbin $$$$$$$                   -
+        -----                                                    -----
+        --------------------------------------------------------------
+        --------------------------------------------------------------
         
         
                                   ----------
@@ -53,13 +53,15 @@ class Mobbin(GoodLook):
             
                            (modules in development)
         
-        RECOMMENDATION: (1) For the time being, if failing to scrape EDGAR 
-                        data, go through methods on this list in order,
-                        to see where module fails to parse data. It is 
-                        free to edit where you see fit. 
+        RECOMMENDATION: (1) For the time being, if failing to 
+                        scrape EDGAR data, go through methods on this 
+                        list in order, to see where module fails to 
+                        parse data. It is free to edit where you see 
+                        fit. 
                         
-                        (2) Most likely will succeed at scraping company
-                        statements, rather than forms of descriptions
+                        (2) Most likely will succeed at scraping 
+                        company statements, rather than forms of 
+                        descriptions
                         
                             <<UPDATE COMING SOON>>
                           
@@ -74,10 +76,11 @@ class Mobbin(GoodLook):
             EdgaRequesta:
             ------------
 
-        .company_soup(xml)                              -- xml : Boolean
+        .company_soup(xml)                            -- xml : Boolean
         
             --finds Beautiful Soup webpage response
-            --set XML as true for 'lxml' parser, false for 'html.parser' 
+            --set XML as true for 'lxml' parser, false for 
+              'html.parser' 
             
         .master_list()
         
@@ -106,7 +109,7 @@ class Mobbin(GoodLook):
             ---------------
                **web scrape from EdgaRequesta must be complete**
             
-        .convert_statement(index)                     -- index : Integer
+        .convert_statement(index)                   -- index : Integer
         
         .statements_dictionary()
         
@@ -139,17 +142,18 @@ class Mobbin(GoodLook):
         
         
         
-        ----------------------------------------------------------------
+        --------------------------------------------------------------
         
-        ----------------------------------------------------------------
-        ----------------------------------------------------------------
+        --------------------------------------------------------------
+        --------------------------------------------------------------
         """ 
         
     def __repr__(self):
         line1 = '\n\n\n\nStatement Titles:\n\n\n' + '-'*100 + '\n\n'
         line_titles = ''
         for i in range(len(self.titles)):
-            line_titles += f'\n       Statement Index: {i} - ' + self.titles[i]
+            line_titles += f'\n       Statement Index: {i} - ' \
+            + self.titles[i]
         last = '\n\n\n' + '-'*100 + '\n\n\n\n\n\n\n'
         return f'{line1}{line_titles}{last}'
         
@@ -162,9 +166,11 @@ class Mobbin(GoodLook):
                     if title_split[j] == df_title:
                         index_maybe = i
                         maybe = True
-                    if title_split[j][1:4] == 'PAR' and j == len(title_split) - 1:
+                    if title_split[j][1:4] == 'PAR' \
+                    and j == len(title_split) - 1:
                         maybe = False
-                    elif title_split[j][1:4] != 'PAR' and j == len(title_split) - 1 and maybe == True:
+                    elif title_split[j][1:4] != 'PAR' \
+                    and j == len(title_split) - 1 and maybe == True:
                         maybe = False
                         index = index_maybe
             statement_name = self.titles[index]
@@ -182,12 +188,15 @@ class Mobbin(GoodLook):
         except: 
             return [None, None]
             
-    def statements_to_csv(self, df_titles=['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']):
+    def statements_to_csv(self, df_titles=['BALANCE', 'INCOME', 
+                                           'OPERATIONS', 'EQUITY', 
+                                           'CASH']):
         df_array = []
         file_array = []
         table_titles = []
         for i in range(len(df_titles)):
-            df, file = self.complete_scrape(csv=True, df_title=df_titles[i])
+            df, file = self.complete_scrape(csv=True, 
+                                            df_title=df_titles[i])
             if df is not None:
                 df_array.append(df)
                 file_array.append(file)
@@ -195,10 +204,15 @@ class Mobbin(GoodLook):
         return [df_array, file_array, table_titles]
     
     def statements_to_sql(self):
-        self.df_array, self.file_array, self.table_titles = self.statements_to_csv()
-        engine = create_engine('sqlite:///temp.db', echo=False)
-        session = create_session(bind=engine, autocommit=False, autoflush=True)
+        self.df_array, self.file_array, self.table_titles = \
+        self.statements_to_csv()
+        engine = create_engine('sqlite:///temp.db', echo=False, 
+                               connect_args={ 
+                                   'check_same_thread': False })
+        session = create_session(bind=engine, autocommit=False, 
+                                 autoflush=True)
         for i in range(len(self.table_titles)):
             self.df_array[i].to_sql(self.table_titles[i], 
                                     con=engine, if_exists='replace')
-        return [self.df_array, self.file_array, self.table_titles, engine, session]
+        return [self.df_array, self.file_array, self.table_titles, 
+                engine, session]
