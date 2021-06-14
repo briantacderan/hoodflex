@@ -3,45 +3,64 @@ import requests
 import datetime as dt
 from bs4 import BeautifulSoup
 
-today = dt.datetime.now()
-year = str(today.year)
-month = '0' + str(today.month) if today.month < 10 else str(today.month)
-day = '0' + str(today.day) if today.day < 10 else str(today.day)
-current_date = year + month + day
 
 class EdgaRequesta:
-    def __init__(self, company_name, form, year, date=current_date, edgar_url='https://www.sec.gov/Archives/edgar/data', edgar_ep='https://www.sec.gov/cgi-bin/browse-edgar', sec_url='https://www.sec.gov'):
+    def __init__(self, company_name, form, year):
+        self.headers = {'User-Agent': 'Chrome/91.0.4472.101',
+                        'Accept-Encoding': 'gzip, deflate',
+                        'Host': 'www.sec.gov'}
+        
         self.company_name = company_name
         self.form = form
         self.year = year
-        self.date = date
-        self.edgar_url = edgar_url
-        self.edgar_ep = edgar_ep
-        self.sec_url = sec_url
         
-    def company_soup(self, xml):
+        today = dt.datetime.now()
+        year = str(today.year)
+        month = '0' + str(today.month) if today.month < 10 else str(today.month)
+        day = '0' + str(today.day) if today.day < 10 else str(today.day)
+        self.date = year + month + day
+        
+        self.edgar_url = 'https://www.sec.gov/Archives/edgar/data'
+        self.edgar_ep = 'https://www.sec.gov/cgi-bin/browse-edgar'
+        self.sec_url = 'https://www.sec.gov'
+        
+        self.soup_html = self.company_soup()
+        self.soup_xml = self.company_soup(xml=True)
+        
+        self.form_entries = self.soup_xml.find_all('entry')
+        
+        self.ml_html = self.master_list()
+        self.ml_xml = self.master_list_xml()
+        self.ml_index = self.recent_form_index()
+        
+        self.form_help = self.recent_form_help()
+        self.master_df = self.form_help_df()
+        
+        self.cik_num = self.cik()
+        
+    def company_soup(self, xml=False):
         output = 'atom' if xml else ''
         parser = 'lxml' if xml else 'html.parser'
         param_dict = {'action': 'getcompany',
                       'dateb': self.date,
                       'owner': 'exclude',
+                      'count': 100,
                       'output': output,
                       'company': self.company_name}
-        webpage_response = requests.get(url=self.edgar_ep, params=param_dict)
+        webpage_response = requests.get(url=self.edgar_ep, params=param_dict, headers=self.headers)
         soup = BeautifulSoup(webpage_response.content, parser)
         return soup
     
     def master_list(self):
-        self.soup_html = self.company_soup(xml=False)
         doc_table = self.soup_html.find_all('table', class_='tableFile2')
 
-        master_list = []
+        ml_html = []
 
         for row in doc_table[0].find_all('tr'):
             cols = row.find_all('td')
 
             if len(cols) != 0:
-                filing_type = cols[0].text.strip()                 
+                filing_type = cols[0].text.strip()
                 filing_date = cols[3].text.strip()
                 filing_numb = cols[4].text.strip()
 
@@ -76,15 +95,13 @@ class EdgaRequesta:
                 file_dict['links']['interactive_data'] = filing_int_link
                 file_dict['links']['filing_number'] = filing_num_link
 
-                master_list.append(file_dict)
-        return master_list
+                ml_html.append(file_dict)
+        return ml_html
     
     def master_list_xml(self):
-        entries = self.soup_xml.find_all('entry')
+        ml_xml = []
 
-        master_list_xml = []
-
-        for entry in entries:
+        for entry in self.form_entries:
             accession_num = entry.find('accession-number').text
 
             entry_dict = {}
@@ -107,17 +124,17 @@ class EdgaRequesta:
             if entry.find('file-number-href') != None:
                 entry_dict[accession_num]['file_info']['file_number_href'] = entry.find('file-number-href').text
             if entry.find('filing-date') != None:
-                entry_dict[accession_num]['file_info']['filing_date'] =  entry.find('filing-date').text
+                entry_dict[accession_num]['file_info']['filing_date'] = entry.find('filing-date').text
             if entry.find('filing-href') != None:
                 entry_dict[accession_num]['file_info']['filing_href'] = entry.find('filing-href').text
             if entry.find('filing-type') != None:
-                entry_dict[accession_num]['file_info']['filing_type'] =  entry.find('filing-type').text
+                entry_dict[accession_num]['file_info']['filing_type'] = entry.find('filing-type').text
             if entry.find('film-number') != None:
-                entry_dict[accession_num]['file_info']['form_number'] =  entry.find('film-number').text
+                entry_dict[accession_num]['file_info']['form_number'] = entry.find('film-number').text
             if entry.find('form-name') != None:
-                entry_dict[accession_num]['file_info']['form_name'] =  entry.find('form-name').text
+                entry_dict[accession_num]['file_info']['form_name'] = entry.find('form-name').text
             if entry.find('size') != None:
-                entry_dict[accession_num]['file_info']['file_size'] =  entry.find('size').text
+                entry_dict[accession_num]['file_info']['file_size'] = entry.find('size').text
 
             entry_dict[accession_num]['request_info'] = {}
             
@@ -125,90 +142,81 @@ class EdgaRequesta:
             entry_dict[accession_num]['request_info']['title'] =  entry.find('title').text
             entry_dict[accession_num]['request_info']['last_updated'] =  entry.find('updated').text
 
-            master_list_xml.append(entry_dict)
-        return master_list_xml
+            ml_xml.append(entry_dict)
+        return ml_xml
     
     def recent_form_index(self):
-        self.ml_html = self.master_list()
         title_length = len(self.form)
         for i in range(len(self.ml_html)):
             if self.ml_html[i]['file_type'][0:title_length] == self.form:
-                recent_form_index = i
+                ml_index = i
                 break
-        return recent_form_index
+        return ml_index
     
-    def xml_help(self):
-        self.soup_xml = self.company_soup(xml=True)
-        ml_index = self.recent_form_index()
-        entries = self.soup_xml.find_all('entry')
-        self.ml_xml = self.master_list_xml()
-        
-        xml_help = []
+    def recent_form_help(self):
+        form_help = []
 
-        xml_access_num = entries[ml_index].find('accession-number').text
-        xml_help.append({'access_num': xml_access_num})
+        xml_access_num = self.form_entries[self.ml_index].find('accession-number').text
+        form_help.append({'access_num': xml_access_num})
         
-        xml_category = self.ml_xml[ml_index][entries[ml_index]\
+        xml_category = self.ml_xml[self.ml_index][self.form_entries[self.ml_index]\
                            .find('accession-number').text]['category']
         for key, value in xml_category.items():
-            xml_help.append({key: value})
+            form_help.append({key: value})
 
-        xml_info = self.ml_xml[ml_index][entries[ml_index]
+        xml_info = self.ml_xml[self.ml_index][self.form_entries[self.ml_index]
                        .find('accession-number').text]['file_info']
         for key, value in xml_info.items():
-            xml_help.append({key: value})
+            form_help.append({key: value})
 
-        xml_requests = self.ml_xml[ml_index][entries[ml_index]\
+        xml_requests = self.ml_xml[self.ml_index][self.form_entries[self.ml_index]\
                            .find('accession-number').text]['request_info']
         for key, value in xml_requests.items():
-            xml_help.append({key: value})
+            form_help.append({key: value})
 
-        return xml_help
+        return form_help
     
-    def master_form_list(self):
-        xml_help = self.xml_help()
-        
+    def form_help_df(self):
         column_list = []
         value_list = []
 
-        for each in xml_help:
+        for each in self.form_help:
             key, value = list(each.items())[0]
             column_list.append(key)
             value_list.append(value)
-        master_form_list = pd.DataFrame(columns=column_list)
-        master_form_list.loc[0] = value_list
-        master_form_list.set_index('form_number', inplace=True)
 
-        return master_form_list
+        master_df = pd.DataFrame(columns=column_list)
+        master_df.loc[0] = value_list
+        master_df.set_index('form_number', inplace=True)
+
+        return master_df
     
     def cik(self):
-        self.mf_list = self.master_form_list()
-        filing_href = self.mf_list['filing_href']
+        filing_href = self.master_df['filing_href']
         cik_num = filing_href[0].split('/')[-3]
         return cik_num
     
-    def filing_summary_url(self):
-        cik_num = self.cik()
-        access_num = self.mf_list.access_num[0]
-        access_num = ''.join(access_num.split('-'))
-        components = [cik_num, access_num, 'index.json']
+    def filing_summary(self):
+        access_num = self.master_df.access_num[0]
+        self.access_num = ''.join(access_num.split('-'))
+        components = [self.cik_num, self.access_num, 'index.json']
         filing_url = self.make_url(components)
-        content = requests.get(filing_url)
+        content = requests.get(url=filing_url, headers=self.headers)
         document_content = content.json()
         for document in document_content['directory']['item']:
             if document['type'] != 'image2.gif':
                 doc_name = document['name']
                 if doc_name == 'FilingSummary.xml':
-                    comp = [cik_num, access_num, doc_name]
-                    doc_url = self.make_url(comp)
-        return doc_url
+                    comp = [self.cik_num, self.access_num, doc_name]
+                    summary_url = self.make_url(comp)
+        return summary_url
     
     def master_reports(self):
-        doc_url = self.filing_summary_url()
-        content = requests.get(doc_url).content
+        summary_url = self.filing_summary()
+        content = requests.get(url=summary_url, headers=self.headers).content
         soup = BeautifulSoup(content, 'lxml')
         reports = soup.find('myreports')
-        company_base_url = doc_url.replace('FilingSummary.xml', '')
+        company_base_url = summary_url.replace('FilingSummary.xml', '')
         
         master_reports = []
         

@@ -183,7 +183,7 @@ class Mobbin(GoodLook):
             df_styled = self.style_table(df_copy, statement_name)
             if filename:
                 return [df, filename]
-            else:    
+            else:
                 return [df, df_styled]
         except: 
             return [None, None]

@@ -14,7 +14,7 @@ class SecuritySpider(EdgaRequesta):
         
     def convert_statement(self, index):
         statement_url = self.urls_list[index]
-        content = requests.get(statement_url).content
+        content = requests.get(url=statement_url, headers=self.headers).content
         soup = BeautifulSoup(content, 'html.parser')
 
         statement_data = {}
