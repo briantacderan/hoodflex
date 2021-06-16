@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 class EdgaRequesta:
     def __init__(self, company_name, form, year):
-        self.headers = {'User-Agent': 'Chrome/91.0.4472.101',
+        self.headers = {'User-Agent': 'Chrome/91.0.4472.106',
                         'Accept-Encoding': 'gzip, deflate',
                         'Host': 'www.sec.gov'}
         
