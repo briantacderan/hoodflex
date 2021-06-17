@@ -2,13 +2,15 @@ import pandas as pd
 import requests
 import datetime as dt
 from bs4 import BeautifulSoup
+import json
 
 
 class EdgaRequesta:
-    def __init__(self, company_name, form, year):
-        self.headers = {'User-Agent': 'Chrome/91.0.4472.106',
-                        'Accept-Encoding': 'gzip, deflate',
-                        'Host': 'www.sec.gov'}
+    def __init__(self, company_name, form, year, user_agent='Chrome/91.0.4472.106'):
+        headers = {'User-Agent': user_agent, 
+                   'Accept-Encoding': 'gzip, deflate', 
+                   'Host': 'www.sec.gov'}
+        self.headers = headers
         
         self.company_name = company_name
         self.form = form
