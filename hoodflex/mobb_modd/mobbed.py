@@ -16,8 +16,9 @@ class Mobbed:
         file_array = []
         table_titles = []
         
+        df_titles = ['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']
+        
         for i in range(len(df_titles)):
-            df_titles = ['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']
             filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_titles[i].lower()[0:4]}.csv"
             try:
                 df = pd.read_csv(filename)
