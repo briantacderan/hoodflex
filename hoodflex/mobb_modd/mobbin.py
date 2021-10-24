@@ -207,8 +207,7 @@ class Mobbin(GoodLook):
         self.df_array, self.file_array, self.table_titles = \
         self.statements_to_csv()
         engine = create_engine('sqlite:///temp.db', echo=False, 
-                               connect_args={ 
-                                   'check_same_thread': False })
+                               connect_args={ 'check_same_thread': False })
         session = create_session(bind=engine, autocommit=False, 
                                  autoflush=True)
         for i in range(len(self.table_titles)):

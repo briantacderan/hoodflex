@@ -6,7 +6,7 @@ import json
 
 
 class EdgaRequesta:
-    def __init__(self, company_name, form, year, user_agent='Chrome/91.0.4472.106'):
+    def __init__(self, company_name, form, year, user_agent='Chrome/93.0.4577.82'):
         headers = {'User-Agent': user_agent, 
                    'Accept-Encoding': 'gzip, deflate', 
                    'Host': 'www.sec.gov'}
