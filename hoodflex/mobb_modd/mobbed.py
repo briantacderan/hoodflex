@@ -52,9 +52,10 @@ class Mobbed(GoodLook):
         
         for i in range(len(df_titles)):
             filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_titles[i].lower()[0:4]}.csv"
+            print('Attempt to get file: \n{filename}\n.\n..\n....\n........')
             try:
                 df = pd.read_csv(filename)
-                print(f'DataFrame ${df_titles[i]} fetch succeeded\n')
+                print(f'DataFrame {df_titles[i]} fetch succeeded\n')
             except:
                 df = None
                 print('No DataFrame available\n')
@@ -65,7 +66,7 @@ class Mobbed(GoodLook):
                 file_array.append(filename)
                 table_titles.append(df_titles[i].lower().title())
                 
-        print(f'Total length of available statements: ${len(table_titles)}\n')
+        print(f'Total length of available statements: {len(table_titles)}\n')
          
         engine = create_engine('sqlite:///temp.db', echo=False, 
                                connect_args={ 'check_same_thread': False })
