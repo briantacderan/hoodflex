@@ -51,8 +51,8 @@ class Mobbed(GoodLook):
         df_titles = ['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']
         
         for i in range(len(df_titles)):
-            filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_titles[i].lower()[0:4]}.csv"
-            print('Attempt to get file: \n{filename}\n.\n..\n....\n........')
+            filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_titles[i][0:4].lower()}.csv"
+            print(f'Attempt to get file: \n{filename}\n.\n..\n....\n........\n')
             try:
                 df = pd.read_csv(filename)
                 print(f'DataFrame {df_titles[i]} fetch succeeded\n')
