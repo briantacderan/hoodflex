@@ -1,8 +1,7 @@
-from hoodflex.mobb_modd._hustle import SecuritySpider
-
-class GoodLook(SecuritySpider):
-    def __init__(self, company_name, form, year, **kwargs):
-        super().__init__(company_name, form, year, **kwargs)
+class GoodLook:
+    def __init__(self):
+        self.form = 'FORM'
+        self.company_name = 'COMPANY'
         
     def style_negative(self, value):
         if type(value) == str:

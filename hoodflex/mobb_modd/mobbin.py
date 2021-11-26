@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import create_session
 
+from hoodflex.mobb_modd._hustle import SecuritySpider
 from hoodflex.mobb_modd._slapper import GoodLook
 
-class Mobbin(GoodLook):
+class Mobbin(SecuritySpider, GoodLook):
     def __init__(self, company_name, form, year, **kwargs):
         super().__init__(company_name, form, year, **kwargs)
         self.statements, self.titles = self.dictionary_info()
@@ -194,6 +195,7 @@ class Mobbin(GoodLook):
         df_array = []
         file_array = []
         table_titles = []
+        
         for i in range(len(df_titles)):
             df, file = self.complete_scrape(csv=True, 
                                             df_title=df_titles[i])
