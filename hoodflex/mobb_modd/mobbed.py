@@ -5,7 +5,7 @@ from hoodflex.mobb_modd._slapper import GoodLook
 
 class Mobbed(GoodLook):
     def __init__(self, company_name, form, year, titles=['N/A'], statements={'N/A': 'VOID'}, **kwargs):
-        super().__init__(company_name, form, year, **kwargs)
+        super().__init__(**kwargs)
         self.company_name = company_name
         self.form = form
         self.year = year
