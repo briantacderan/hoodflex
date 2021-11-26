@@ -44,10 +44,6 @@ class Mobbed(GoodLook):
             return [None, None]
         
     def get_stash(self):
-        engine = create_engine('sqlite:///temp.db', echo=False, 
-                               connect_args={ 'check_same_thread': False })
-        session = create_session(bind=engine, autocommit=False, 
-                                 autoflush=True)
         df_array = []
         file_array = []
         table_titles = []
@@ -58,13 +54,22 @@ class Mobbed(GoodLook):
             filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_titles[i].lower()[0:4]}.csv"
             try:
                 df = pd.read_csv(filename)
+                print(f'DataFrame ${df_titles[i]} fetch succeeded\n')
             except:
                 df = None
+                print('No DataFrame available\n')
                 continue
             if df is not None:
+                print('Creating assets: df_array, file_array, and table_titles\n')
                 df_array.append(df)
                 file_array.append(filename)
                 table_titles.append(df_titles[i].lower().title())
+                
+        print(f'Total length of available statements: ${len(table_titles)}\n')
+         
+        engine = create_engine('sqlite:///temp.db', echo=False, 
+                               connect_args={ 'check_same_thread': False })
+        session = create_session(bind=engine, autocommit=False, autoflush=True)
         for i in range(len(table_titles)):
             df_array[i].to_sql(table_titles[i], con=engine, if_exists='replace')
         return [df_array, file_array, table_titles, engine, session]
