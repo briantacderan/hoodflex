@@ -42,8 +42,6 @@ class Mobbed(GoodLook):
             return [None, None]
         
     def get_stash(self, df_array, table_titles):
-        df_titles = ['BALANCE', 'INCOME', 'OPERATIONS', 'EQUITY', 'CASH']
-         
         engine = create_engine('sqlite:///temp.db', echo=False, 
                                connect_args={ 'check_same_thread': False })
         session = create_session(bind=engine, autocommit=False, autoflush=True)

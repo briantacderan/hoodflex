@@ -179,7 +179,7 @@ class Mobbin(SecuritySpider, GoodLook):
             filename = None
             if csv:
                 filename = f"./static/resources/data/{self.company_name.lower().split(' ')[0].split(',')[0]}-{self.year}-{self.form.lower()}-{df_title[0:4].lower()}.csv"
-                df.to_csv(filename)
+                df.to_csv(filename, index=False)
             df_copy = df.copy()
             df_styled = self.style_table(df_copy, statement_name)
             if filename:
